@@ -58,7 +58,7 @@ This will create 2 artifacts in the target directory:
 
 ### Run:
 
-Configuration:
+Configuration options:
  lucene.version - set a lucene version
 
 Interactive Mode:
