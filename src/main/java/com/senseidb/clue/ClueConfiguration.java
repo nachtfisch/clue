@@ -79,7 +79,7 @@ public class ClueConfiguration {
     return indexReaderFactory;
   }
 
-  private Version getLuceneVersion() {
+  public Version getLuceneVersion() {
     return luceneVersion;
   }
 

@@ -9,7 +9,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.util.Version;
 
 import com.senseidb.clue.commands.ClueCommand;
 import com.senseidb.clue.commands.HelpCommand;
@@ -25,7 +24,7 @@ public class ClueApplication {
       System.out.println("lucene index does not exist at: "+idxLocation);
       System.exit(1);
     }
-    IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LUCENE_43, new StandardAnalyzer(Version.LUCENE_43));    
+    IndexWriterConfig writerConfig = new IndexWriterConfig(config.getLuceneVersion(), new StandardAnalyzer(config.getLuceneVersion()));
     ctx = new ClueContext(dir, config, writerConfig, interactiveMode);
     helpCommand = ctx.getCommand(HelpCommand.CMD_NAME);
   }
