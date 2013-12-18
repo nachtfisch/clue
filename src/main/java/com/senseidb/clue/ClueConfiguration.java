@@ -24,13 +24,15 @@ public class ClueConfiguration {
   private static final String ANALYZER_QUERY_PARAM = "analyzer.query";
   private static final String INDEX_READER_FACTORY_PARAM = "indexreader.factory";
   private static final String QUERY_BUILDER_PARAM = "query.builder";
-  
+  private static final String LUCENE_VERSION_PARAM = "lucene.version";
+
   private final Analyzer analyzerQuery;
   private final DirectoryBuilder dirBuilder;
   private final QueryBuilder queryBuilder;
   private final IndexReaderFactory indexReaderFactory;
-  
-  private static <T> T getInstance(String className, T defaultInstance) {
+  private final Version luceneVersion;
+
+    private static <T> T getInstance(String className, T defaultInstance) {
     try {
       if (className == null) {
         return defaultInstance;
@@ -43,16 +45,18 @@ public class ClueConfiguration {
     }
   }
 
-  private ClueConfiguration(Properties config) {    
-    analyzerQuery = getInstance(config.getProperty(ANALYZER_QUERY_PARAM), 
-        new StandardAnalyzer(Version.LUCENE_43));    
+  private ClueConfiguration(Properties config) {
+    luceneVersion = getAnalyzerVersion(config, Version.LUCENE_43);
+
+    analyzerQuery = getInstance(config.getProperty(ANALYZER_QUERY_PARAM),
+        new StandardAnalyzer(getLuceneVersion()));
     dirBuilder = getInstance(config.getProperty(DIRECTORY_BUILDER_PARAM),
         new DefaultDirectoryBuilder());
     queryBuilder = getInstance(config.getProperty(QUERY_BUILDER_PARAM),
         new DefaultQueryBuilder());
     indexReaderFactory = getInstance(config.getProperty(INDEX_READER_FACTORY_PARAM),
         new DefaultIndexReaderFactory());
-    
+
     System.out.println("Analyzer: \t\t" + analyzerQuery.getClass());
     System.out.println("Query Builder: \t\t" + queryBuilder.getClass());
     System.out.println("Directory Builder: \t" + dirBuilder.getClass());
@@ -73,6 +77,10 @@ public class ClueConfiguration {
 
   public IndexReaderFactory getIndexReaderFactory() {
     return indexReaderFactory;
+  }
+
+  private Version getLuceneVersion() {
+    return luceneVersion;
   }
 
   public static ClueConfiguration load() throws IOException {
@@ -99,4 +107,14 @@ public class ClueConfiguration {
     String dir = "hdfs:///Users/jwang";
     System.out.println(new URI(dir).getScheme());
   }
+
+  private static Version getAnalyzerVersion(Properties config, Version defaultVersion) {
+    String analyzerVersionString = config.getProperty(LUCENE_VERSION_PARAM);
+    if (analyzerVersionString != null) {
+      return Version.valueOf(analyzerVersionString);
+    } else {
+      return defaultVersion;
+    }
+  }
+
 }
