@@ -32,6 +32,7 @@ import com.senseidb.clue.commands.SearchCommand;
 import com.senseidb.clue.commands.StoredFieldCommand;
 import com.senseidb.clue.commands.TermVectorCommand;
 import com.senseidb.clue.commands.TermsCommand;
+import org.apache.lucene.util.Version;
 
 public class ClueContext {
 
@@ -44,15 +45,17 @@ public class ClueContext {
   private final IndexWriterConfig writerConfig;
   private final QueryBuilder queryBuilder;
   private final Analyzer analyzerQuery;
+  private final Version luceneVersion;
   
   public ClueContext(Directory dir, ClueConfiguration config,
        IndexWriterConfig writerConfig, boolean interactiveMode) throws Exception {
     this.directory = dir;
     this.analyzerQuery = config.getAnalyzerQuery();
     this.readerFactory = config.getIndexReaderFactory();
+    this.luceneVersion = config.getLuceneVersion();
     this.readerFactory.initialize(directory);
     this.queryBuilder = config.getQueryBuilder();
-    this.queryBuilder.initialize("contents", analyzerQuery);
+    this.queryBuilder.initialize("contents", analyzerQuery, luceneVersion);
     this.writerConfig = writerConfig;
     this.writer = null;
     this.interactiveMode = interactiveMode;
@@ -89,6 +92,9 @@ public class ClueContext {
     return analyzerQuery;
   }
 
+  public Version getLuceneVersion() {
+    return luceneVersion;
+  }
 
   public void registerCommand(ClueCommand cmd){
     String cmdName = cmd.getName();

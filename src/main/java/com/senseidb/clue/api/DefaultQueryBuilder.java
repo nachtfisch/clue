@@ -10,9 +10,9 @@ public class DefaultQueryBuilder implements QueryBuilder {
   private QueryParser parser = null;
   
   @Override
-  public void initialize(String defaultField, Analyzer analyzer)
+  public void initialize(String defaultField, Analyzer analyzer, Version luceneVersion)
       throws Exception {
-    parser = new QueryParser(Version.LUCENE_43, defaultField, analyzer);
+    parser = new QueryParser(luceneVersion, defaultField, analyzer);
     
   }
 

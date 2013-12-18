@@ -29,7 +29,7 @@ public class DeleteCommand extends ClueCommand {
   
   @Override
   public void execute(String[] args, PrintStream out) throws Exception {
-    QueryParser qparser = new QueryParser(Version.LUCENE_43, "contents", new StandardAnalyzer(Version.LUCENE_43));
+    QueryParser qparser = new QueryParser(ctx.getLuceneVersion(), "contents", new StandardAnalyzer(ctx.getLuceneVersion()));
     Query q = null;
     if (args.length == 0){
       q = new MatchAllDocsQuery();
