@@ -58,6 +58,9 @@ This will create 2 artifacts in the target directory:
 
 ### Run:
 
+Configuration Options:
+ lucene.version
+
 Interactive Mode:
 
     ./bin/clue.sh my-idx
